@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vuelo Espacial</title>
+        <style>
+             body {
+            font-family: 'Franklin Gothic Medium';
+            margin: 20px;
+        }
+            .navbar {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #16b69b81;
+            margin-bottom: 2%;
+            margin: 0 auto; 
+            padding: 0; 
+        }
+        .navbar a {
+            padding: 10px 20px; 
+            text-decoration: none;
+            color: white;
+            margin: 0 10px; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            transition: background-color 0.3s; 
+        }
+        .navbar a:hover {
+            background-color: #03887d;
+        }
+
+            #shuttle-box {
+                text-align: center;
+                padding: 20px;
+                border: 2px solid black;
+                width: 300px;
+                margin: 50px auto;
+            }
+            button {
+                margin: 10px;
+                padding: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="navbar">
+            <a href="Ejercicio7.html">Inicio</a>
+            <a href="Ejercicio1.html">Página 1</a>
+            <a href="Ejercicio2.html">Página 2</a>
+            <a href="Ejercicio3.html">Página 3</a>
+            <a href="Ejercicio4.html">Página 4</a>
+            <a href="Ejercicio4_1.html">Página 4.1</a>
+            <a href="Ejercicio5.html">Página 5</a>
+            <a href="Ejercicio6.html">Página 6</a>
+            <a href="Ejercicio6_1.html">Página 6.1</a>
+        </div>
+        <div id="shuttle-box">
+            <p id="estado">The shuttle is on the ground</p>
+            <button id="takeoff">Take off</button>
+            <button id="abort">Abort Mission</button>
+        </div>
+        <script>
+            document.getElementById("takeoff").addEventListener("click", function() {
+                document.getElementById("estado").textContent = "Houston, we have liftoff!";
+            });
+    
+            let abortButton = document.getElementById("abort");
+            abortButton.addEventListener("mouseover", function() {
+                this.style.backgroundColor = "red";
+            });
+            abortButton.addEventListener("mouseout", function() {
+                this.style.backgroundColor = "";
+            });
+            abortButton.addEventListener("click", function() {
+                if (confirm("Are you sure you want to abort the mission?")) {
+                    document.getElementById("estado").textContent = "Mission aborted! Space shuttle returning home.";
+                }
+            });
+        </script>
+    </body>
+    </html>

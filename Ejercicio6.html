@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+    <style>
+            body {
+            font-family: 'Franklin Gothic Medium';
+            margin: 20px;
+        }
+        .navbar {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #16b69b81;
+            margin-bottom: 2%;
+            margin: 0 auto; 
+            padding: 0; 
+        }
+        .navbar a {
+            padding: 10px 20px; 
+            text-decoration: none;
+            color: white;
+            margin: 0 10px; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            transition: background-color 0.3s; 
+        }
+        .navbar a:hover {
+            background-color: #03887d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="Ejercicio7.html">Inicio</a>
+        <a href="Ejercicio1.html">Página 1</a>
+        <a href="Ejercicio2.html">Página 2</a>
+        <a href="Ejercicio3.html">Página 3</a>
+        <a href="Ejercicio4.html">Página 4</a>
+        <a href="Ejercicio4_1.html">Página 4.1</a>
+        <a href="Ejercicio5.html">Página 5</a>
+        <a href="Ejercicio6.html">Página 6</a>
+        <a href="Ejercicio6_1.html">Página 6.1</a>
+    </div>
+    <h1 class="text-center">Carrito de la compra</h1>
+
+    <div class="container">
+        <table class="table mx-auto">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">Producto</th>
+                    <th class="text-center" scope="col">Nombre</th>
+                    <th class="text-center" scope="col">Cantidad</th>
+                    <th class="text-center" scope="col">Precio</th>
+                    <th class="text-center" scope="col">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Producto uno</td>
+                    <td>
+                        <button class="btn btn-outline-dark" onclick="aumentar(0)">+</button>
+                        <input type="number" class="input-mini text-center" value="0">
+                        <button class="btn btn-outline-dark" onclick="disminuir(0)">-</button></td>
+                    <td><input type="number" class="precio" value="72"></td>
+                    <td class="text-end">0 €</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Producto dos</td>
+                    <td>
+                        <button class="btn btn-outline-dark" onclick="aumentar(1)">+</button>
+                        <input type="number" class="input-mini text-center" value="0">
+                        <button class="btn btn-outline-dark" onclick="disminuir(1)">-</button></td>
+                    <td><input type="number" class="precio" value="125"></td>
+                    <td class="text-end">0 €</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Producto tres</td>
+                    <td>
+                        <button class="btn btn-outline-dark" onclick="aumentar(2)">+</button>
+                        <input type="number" class="input-mini text-center" value="0">
+                        <button class="btn btn-outline-dark" onclick="disminuir(2)">-</button></td>
+                    <td><input type="number" class="precio" value="250"></td>
+                    <td class="text-end">0 €</td>
+                </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td>Producto cuatro</td>
+                    <td>
+                        <button class="btn btn-outline-dark" onclick="aumentar(3)">+</button>
+                        <input type="number" class="input-mini text-center" value="0">
+                        <button class="btn btn-outline-dark" onclick="disminuir(3)">-</button></td>
+                    <td><input type="number" class="precio" value="300"></td>
+                    <td class="text-end">0 €</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="5" class="text-end" id="precioTotal">Total = 0€</th>
+                </tr>
+            </tfoot>
+
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+        
+    <script>
+
+        const precio = document.querySelectorAll('.precio');
+        const cantidad = document.querySelectorAll('.input-mini.text-center');
+        const total = document.querySelectorAll('.text-end');
+        const precioTotal = document.getElementById('precioTotal');
+
+        function aumentar(index) {
+            let canti = cantidad[index];
+            canti.value = parseInt(canti.value) + 1;
+            actualizaPrecio();
+        }
+
+        function disminuir(index) {
+            let canti = cantidad[index];
+            if (canti.value > 0) {
+                canti.value = parseInt(canti.value) - 1;
+                actualizaPrecio();
+            }
+        }
+
+
+       function actualizaPrecio(){
+        let suma = 0;
+        cantidad.forEach((cant, index) => {
+          let p = parseFloat(precio[index].value);
+          let c = parseInt(cant.value);
+          let subtotal = p * c;
+          suma += subtotal;
+          total[index].innerHTML = subtotal;
+        });
+        precioTotal.textContent = "Total = " + suma + "€";
+    };
+
+        cantidad.forEach(cant => {
+            cant.addEventListener('change', actualizaPrecio);
+        });
+        precio.forEach(precio => {
+            precio.addEventListener('change', actualizaPrecio);
+        });
+        actualizaPrecio();
+
+
+    </script>
+</body>
+</html>

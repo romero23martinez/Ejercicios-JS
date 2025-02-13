@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD</title>
+    <style>
+        body {
+            font-family: 'Franklin Gothic Medium';
+            align-content: center;
+            text-align: center;
+            padding: 3%;
+        }
+        .navbar {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #16b69b81;
+            margin-bottom: 2%;
+            margin: 0 auto; 
+            padding: 0; 
+        }
+        .navbar a {
+            padding: 10px 20px; 
+            text-decoration: none;
+            color: white;
+            margin: 0 10px; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            transition: background-color 0.3s; 
+        }
+        .navbar a:hover {
+            background-color: #03887d;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        button {
+            border: 1px solid #000000;
+            background-color: #07c4dd7c;
+
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #1ef7549c;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="Ejercicio7.html">Inicio</a>
+        <a href="Ejercicio1.html">Página 1</a>
+        <a href="Ejercicio2.html">Página 2</a>
+        <a href="Ejercicio3.html">Página 3</a>
+        <a href="Ejercicio4.html">Página 4</a>
+        <a href="Ejercicio4_1.html">Página 4.1</a>
+        <a href="Ejercicio5.html">Página 5</a>
+        <a href="Ejercicio6.html">Página 6</a>
+        <a href="Ejercicio6_1.html">Página 6.1</a>
+    </div>
+
+    <h1>CRUD API JS</h1>
+
+    <div>
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="email" placeholder="Email">
+        <input type="number" id="edad" placeholder="Edad">
+        <button onclick="crearRegistro()">Crear</button>
+        <button onclick="actualizarRegistro()" id="btnActualizar" style="display: none;">Actualizar</button>
+    </div>
+
+    <table id="tablaRegistros">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Edad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        const API_URL = 'https://crudcrud.com/api/5c7946f7a819446ab7bff1760df4877f/usuarios';
+
+        async function obtenerRegistros() {
+            try {
+                const respuesta = await fetch(API_URL);
+                const registros = await respuesta.json();
+                const tbody = document.querySelector('#tablaRegistros tbody');
+                tbody.innerHTML = '';
+
+                registros.forEach(registro => {
+                    const fila = `
+                        <tr>
+                            <td>${registro._id}</td>
+                            <td>${registro.nombre}</td>
+                            <td>${registro.email}</td>
+                            <td>${registro.edad}</td>
+                            <td>
+                                <button onclick="editarRegistro('${registro._id}')">Editar</button>
+                                <button onclick="eliminarRegistro('${registro._id}')">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += fila;
+                });
+            } catch (error) {
+                console.error('Error al obtener registros:', error);
+            }
+        }
+
+        async function crearRegistro() {
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const edad = document.getElementById('edad').value;
+
+            try {
+                const respuesta = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body:JSON.stringify({
+                            nombre: nombre,
+                            email: email,
+                            edad: edad
+                    })
+                });
+                if (respuesta.ok) {
+                    obtenerRegistros(); 
+                    document.getElementById('nombre').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('edad').value = '';
+                }
+            } catch (error) {
+                console.error('Error al crear el registro:', error);
+            }
+        }
+
+        function editarRegistro(id) {
+            const filas = document.querySelectorAll("#tablaRegistros tbody tr");
+            let fila;
+            filas.forEach( function(f) {
+                if (f.children[0].textContent.trim() === id) {
+                    fila = f;
+                }
+            });
+
+            const nombre = fila.children[1].textContent;
+            const email = fila.children[2].textContent;
+            const edad = fila.children[3].textContent;
+
+            document.getElementById('nombre').value = nombre;
+            document.getElementById('email').value = email;
+            document.getElementById('edad').value = edad;
+
+            document.getElementById('btnActualizar').style.display = 'inline-block';
+            document.getElementById('btnActualizar').setAttribute('data-id', id);
+        }
+
+  
+        async function actualizarRegistro() {
+            const id = document.getElementById('btnActualizar').getAttribute('data-id');
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const edad = document.getElementById('edad').value;
+
+            try {
+                const respuesta = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body:JSON.stringify({
+                            nombre: nombre,
+                            email: email,
+                            edad: edad
+                    })
+                });
+                if (respuesta.ok) {
+                    obtenerRegistros();
+                    document.getElementById('nombre').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('edad').value = '';
+                    document.getElementById('btnActualizar').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error al actualizar el registro:', error);
+            }
+        }
+
+        async function eliminarRegistro(id) {
+            try {
+                const respuesta = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+                if (respuesta.ok) {
+                    obtenerRegistros(); 
+                }
+            } catch (error) {
+                console.error('Error al eliminar el registro:', error);
+            }
+        }
+
+        obtenerRegistros();
+    </script>
+</body>
+</html>
