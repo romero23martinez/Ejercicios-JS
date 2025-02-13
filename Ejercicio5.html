@@ -95,7 +95,7 @@
     </table>
 
     <script>
-        const API_URL = 'https://crudcrud.com/api/5c7946f7a819446ab7bff1760df4877f/usuarios';
+        const API_URL = 'https://67ae28379e85da2f020ca294.mockapi.io/dados';
 
         async function obtenerRegistros() {
             try {
@@ -104,6 +104,7 @@
                 const tbody = document.querySelector('#tablaRegistros tbody');
                 tbody.innerHTML = '';
 
+                //recuerda que si usas otra api pueden cambiar los campos id
                 registros.forEach(registro => {
                     const fila = `
                         <tr>
